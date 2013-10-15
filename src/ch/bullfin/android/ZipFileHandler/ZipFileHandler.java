@@ -32,55 +32,16 @@ public class ZipFileHandler {
         return instance;
     }
 
-    public void unZip(URL inputUrl, String outputPath) {
+    public void unZip(URL inputUrl, String outputDirectoryPath) {
         this.inputUrl   = inputUrl;
-        this.outputPath = outputPath;
+        this.outputPath = outputDirectoryPath;
         unZip();
     }
 
-    public void unZip(File inputFile, String outputPath) {
+    public void unZip(File inputFile, String outputDirectoryPath) {
         this.inputFile  = inputFile;
-        this.outputPath = outputPath;
+        this.outputPath = outputDirectoryPath;
         unZip();
-    }
-
-    public void zip(ArrayList<File> inputFiles, String outputPath) {
-        this.inputFiles = inputFiles;
-        this.outputPath = outputPath;
-        File outputFile = new File(outputPath);
-        if (!outputFile.exists()){
-            try {
-                if (!outputFile.createNewFile()) { return; }
-            } catch (IOException e) { Log.v(LOG_TAG, e.getMessage()); }
-        }
-        zip();
-    }
-
-    private void zip() {
-        if (inputFiles != null && outputPath != null) {
-            try {
-                BufferedInputStream bufferedInputStream;
-                FileOutputStream zipFileOutputStream = new FileOutputStream(outputPath);
-                ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(zipFileOutputStream));
-                byte[] buffer = new byte[1024];
-                for (File inputFile : inputFiles) {
-                    ZipEntry zipEntry = new ZipEntry(inputFile.getName());
-                    zipOutputStream.putNextEntry(zipEntry);
-
-                    FileInputStream fileInputStream = new FileInputStream(inputFile);
-                    bufferedInputStream = new BufferedInputStream(fileInputStream, 1024);
-                    int length;
-                    while ((length = bufferedInputStream.read(buffer)) != -1) {
-                        zipOutputStream.write(buffer, 0, length);
-                    }
-                }
-                zipOutputStream.close();
-            } catch (FileNotFoundException e) {
-                Log.v(LOG_TAG, e.getMessage());
-            } catch (IOException e) {
-                Log.v(LOG_TAG, e.getMessage());
-            }
-        }
     }
 
     private void unZip() {
@@ -118,7 +79,7 @@ public class ZipFileHandler {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.v(LOG_TAG, e.getMessage());
         }
     }
 
@@ -126,6 +87,47 @@ public class ZipFileHandler {
         File dir = new File(dirPath);
         if (!dir.isDirectory()){
             Log.v(LOG_TAG, "Directory (" + dir.getAbsolutePath() + ((dir.mkdirs()) ? ") created successfully." : ") creation failed.") );
+        }
+    }
+
+    public void zip(ArrayList<File> inputFiles, String outputFilePath) {
+        this.inputFiles = inputFiles;
+        this.outputPath = outputFilePath;
+        File outputFile = new File(outputFilePath);
+        if (!outputFile.exists()){
+            try {
+                if (!outputFile.createNewFile()) { return; }
+            } catch (IOException e) {
+                Log.v(LOG_TAG, e.getMessage());
+            }
+        }
+        zip();
+    }
+
+    private void zip() {
+        if (inputFiles != null && outputPath != null) {
+            try {
+                BufferedInputStream bufferedInputStream;
+                FileOutputStream zipFileOutputStream = new FileOutputStream(outputPath);
+                ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(zipFileOutputStream));
+                byte[] buffer = new byte[1024];
+                for (File inputFile : inputFiles) {
+                    ZipEntry zipEntry = new ZipEntry(inputFile.getName());
+                    zipOutputStream.putNextEntry(zipEntry);
+
+                    FileInputStream fileInputStream = new FileInputStream(inputFile);
+                    bufferedInputStream = new BufferedInputStream(fileInputStream, 1024);
+                    int length;
+                    while ((length = bufferedInputStream.read(buffer)) != -1) {
+                        zipOutputStream.write(buffer, 0, length);
+                    }
+                }
+                zipOutputStream.close();
+            } catch (FileNotFoundException e) {
+                Log.v(LOG_TAG, e.getMessage());
+            } catch (IOException e) {
+                Log.v(LOG_TAG, e.getMessage());
+            }
         }
     }
 }
