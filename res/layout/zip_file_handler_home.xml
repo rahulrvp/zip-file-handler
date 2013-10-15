@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical">
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Download and Unzip"
+            android:onClick="unzipFromUrl"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Unzip From File"
+            android:onClick="unzipFromFile"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Zip Files"
+            android:onClick="zipFilesIntoOne"/>
+</LinearLayout>
