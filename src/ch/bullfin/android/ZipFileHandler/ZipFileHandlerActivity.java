@@ -41,9 +41,7 @@ public class ZipFileHandlerActivity extends Activity {
 
     public void zipFilesIntoOne(View view) {
         ArrayList<File> inputFiles = new ArrayList<File>();
-        inputFiles.add(new File(SD_CARD_PATH + File.separator + "sample_1.txt"));
-        inputFiles.add(new File(SD_CARD_PATH + File.separator + "sample_2.txt"));
-        inputFiles.add(new File(SD_CARD_PATH + File.separator + "sample_3.txt"));
+        inputFiles.add(new File(SD_CARD_PATH + File.separator + "sample.txt"));
         ZipFileHandler.getInstance().zip(inputFiles, SD_CARD_PATH + "/sample.zip");
     }
 }

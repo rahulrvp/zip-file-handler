@@ -32,19 +32,19 @@ public class ZipFileHandler {
         return instance;
     }
 
-    public void unZip(URL inputUrl, String outputDirectoryPath) {
+    public boolean unZip(URL inputUrl, String outputDirectoryPath) {
         this.inputUrl   = inputUrl;
         this.outputPath = outputDirectoryPath;
-        unZip();
+        return unZip();
     }
 
-    public void unZip(File inputFile, String outputDirectoryPath) {
+    public boolean unZip(File inputFile, String outputDirectoryPath) {
         this.inputFile  = inputFile;
         this.outputPath = outputDirectoryPath;
-        unZip();
+        return unZip();
     }
 
-    private void unZip() {
+    private boolean unZip() {
         ZipInputStream zipInputStream = null;
             try {
                 if (inputUrl != null) {
@@ -57,11 +57,12 @@ public class ZipFileHandler {
             }
 
         if (zipInputStream != null){
-            unZip(zipInputStream);
+            return unZip(zipInputStream);
         }
+        return false;
     }
 
-    private void unZip(ZipInputStream zipInputStream) {
+    private boolean unZip(ZipInputStream zipInputStream) {
         ZipEntry zipEntry;
         try {
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
@@ -78,8 +79,10 @@ public class ZipFileHandler {
                     fileOutputStream.close();
                 }
             }
+            return true;
         } catch (IOException e) {
             Log.v(LOG_TAG, e.getMessage());
+            return false;
         }
     }
 
